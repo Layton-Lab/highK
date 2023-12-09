@@ -23,5 +23,5 @@ These are the files use for making the figures in the manuscript. The simulation
 - The simulations for the data in "MultiDaySim" are done by using **driver_TGFeffect_multiday.m**
 - Model code **kreg_eqns.m**
 - Parameter values are set using **set_params.m**
-- Files used to conduct the sensitivity are in "SA"
+- Files used to conduct the sensitivity are in "SA". Use **localsensitivity.r** for local sensitivity analysis and **MorrisAnalysis_r100.r** for the Morris Analysis. Postprocess results with **postprocess_localsensitivity** and **postprocess_MorrisAnalysis.r**
 
