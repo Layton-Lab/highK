@@ -20,7 +20,8 @@ These are the files use for making the figures in the manuscript. The simulation
 **postprocess_localsensitivity.m** Fig A.2
 
 ## Key files
+- The simulations for the data in "MultiDaySim" are done by using **driver_TGFeffect_multiday.m**
+- Model code **kreg_eqns.m**
+- Parameter values are set using **set_params.m**
+- Files used to conduct the sensitivity are in "SA"
 
-The simulations for the data in MultiDaySim are done using **driver_TGFeffect_multiday.m**.
-The model equations are listed in **kreg_eqns.m**.
-Parameter values are set using **set_params.m**
