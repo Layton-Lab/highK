@@ -1,7 +1,7 @@
 # High K diet
-This code is for the K+ regulation model under a high K+ diet. 
+This code is for the K+ regulation model used in [Stadt & Layton, A modeling analysis of whole-body potassium regulation on a high potassium diet: Proximal tubule and tubuloglomerular feedback effects](https://www.biorxiv.org/content/10.1101/2023.12.12.571254v1.abstract). 
 
-Please cite [Stadt & Layton, PLOS Comp Bio, 2022](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010607)
+
 
 ## Figure replication
 These are the files use for making the figures in the manuscript. The simulation data is stored in the directory "MultiDaySim/" and the sensitivity analysis data is stored in "Sensitivity/". 
