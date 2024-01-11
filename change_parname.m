@@ -61,6 +61,10 @@ function pnew = change_parname(pname)
         pnew = "\alpha_{al}";
     elseif strcmp(pname, "beta_al")
         pnew = "\beta_{al}";
+    elseif strcmp(pname, "k")
+        pnew = "\alpha_{insulin}";
+    elseif strcmp(pname, "x0")
+        pnew = "\beta_{insulin}";
     else
         pnew = pname;
     end
