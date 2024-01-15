@@ -48,7 +48,6 @@ do_FF = true;
 MKX = 0;
 Kintake = 0;
 meal_start = 0;
-highK_eff = 0;
 TGF_eff = 0;
 for i = 1:2:length(varargin)
     temp = varargin{i+1};
@@ -67,15 +66,10 @@ for i = 1:2:length(varargin)
         Kintake = temp(1);
     elseif strcmp(varargin{i}, 'meal_time')
         meal_start = temp(1);
-%     elseif strcmp(varargin{i}, 'highK_eff')
-%         highK_eff = temp(1);
     elseif strcmp(varargin{i}, 'TGF_eff')
         TGF_eff = temp(1);
         alpha_TGF = temp(2);
         eta_ptKreab = temp(3);
-%         if TGF_eff
-%             fprintf('doing TGF_eff \n')
-%         end
     else
         disp('WRONG VARARGIN INPUT')
         fprintf('What is this varargin input? %s \n', varargin{i})
@@ -144,25 +138,8 @@ else
 end
 
 % renal K handling
-
-% if highK_eff > 0
-%     if highK_eff == 1
-%         GFR = (1 - 0.29) * 0.125;
-%         eta_ptKreab = 0.36; % lower fractional PT reab
-%     elseif highK_eff == 2
-%         eta_ptKreab = 0.36; % lower fractional PT reab only
-%     elseif highK_eff == 3
-%         GFR = (1 - 0.29) * 0.125; % GFR change only
-%     else
-%         fprintf('What is this highK_eff? %i', highK_eff)
-%     end
-% end
-
-% NOTE: should be able to make highK_eff happen by changing
-% TGF instead
-
 eta_psKreab_base = eta_ptKreab_base + eta_LoHKreab;
-if TGF_eff == 1
+if TGF_eff == 1 % PT + GFR effect
     eta_psKreab = eta_ptKreab + eta_LoHKreab;
     GFR = GFR_base + alpha_TGF * (eta_psKreab - eta_psKreab_base);
 elseif TGF_eff == 2 % GFR only
@@ -170,7 +147,7 @@ elseif TGF_eff == 2 % GFR only
     eta_psKreab = eta_ptKreab + eta_LoHKreab;
     GFR = GFR_base + alpha_TGF * (eta_psKreab - eta_psKreab_base);
 elseif TGF_eff == 3 % PT only
-    eta_psKreab = eta_ptKreab + eta_LOHKreab;
+    eta_psKreab = eta_ptKreab + eta_LoHKreab;
     GFR = GFR_base;
 else
     eta_ptKreab = eta_ptKreab_base; % PT K reab is baseline value
@@ -211,10 +188,13 @@ UrineK   = dtK + cdKsec - cdKreab;
 dydt(2) = Gut2plasma - Plas2ECF - UrineK;
 
 %% Interstitial K (M_Kinter)
+% ALD
+rho_al = (66.4 + 0.273*C_al)./89.6050;
+
+% insulin
 max_rho = A_insulin;
 m = (max_rho - 1.0)/(0.325 - get_Cinsulin(t_insulin_ss));
 b = max_rho - 0.325 * m;
-% insulin
 if do_insulin
     rho_insulin = max(1.0,m*C_insulin + b);
 else

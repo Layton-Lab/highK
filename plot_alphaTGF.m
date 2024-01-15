@@ -23,7 +23,7 @@ for ii = 1:length(alpha_fold)
 
     notes = 'alpha_tgf';
     n_days = 50;
-    date_fixed = '25-Oct-2023'; % change date if updating data
+    date_fixed = '15-Jan-2024'; % change date if updating data
 
     fname = strcat('./MultiDaySim/', date_fixed, '_driver_multiday',...
             '_insulin-', num2str(1),...
@@ -69,7 +69,7 @@ cmap = turbo(length(alpha_fold) + 2);
 lw = 3;  ls = '-';
 cgraymap = gray(5); cgray = cgraymap(1,:);
 lwgray = 4.5; lsgray = ':';
-f.labs = 18; f.xlab = 18; f.ylab = 16; f.gca = 16; f.leg = 14; f.title = 22;
+f.labs = 18; f.xlab = 18; f.ylab = 16; f.gca = 16; f.leg = 12; f.title = 22;
 
 ylims_plas = [3.4,6.5];
 ylims_muscle = [110,200];
@@ -123,7 +123,8 @@ hold on
 for ii = 1:length(alpha_fold)
     plot(alpha_fold(ii), Kend(1,ii), 'marker', ms, ...
                     'markerfacecolor', cmap(ii,:), 'color', cmap(ii,:), 'linewidth', lw, ...
-                    'markersize', marksize)
+                    'markersize', marksize,...
+                    'linestyle', 'none')
 end
 xticks(alpha_fold)
 yline(3.5,'color',cgray,'linestyle',lsgray, 'linewidth', lwgray, 'HandleVisibility', 'off')
@@ -131,6 +132,7 @@ yline(5.0,'color',cgray,'linestyle',lsgray, 'linewidth', lwgray, 'HandleVisibili
 set(gca, 'fontsize', f.gca)
 xlabel("\alpha_{TGF} / \alpha_{TGF}^{base}", 'fontsize', f.xlab)
 ylabel('Final Plasma [K^+] (mmol/L)')
+legend(labs, 'location', 'best', 'fontsize', f.leg)
 ylim(ylims_plas)
 grid on
 
@@ -140,7 +142,8 @@ hold on
 for ii = 1:length(alpha_fold)
     plot(alpha_fold(ii), Kend(2,ii), 'marker', ms, ...
                     'markerfacecolor', cmap(ii,:), 'color', cmap(ii,:), 'linewidth', lw, ...
-                    'markersize', marksize)
+                    'markersize', marksize,...
+                    'linestyle', 'none')
 end
 %xticklabels(labs)
 xticks(alpha_fold)
@@ -150,6 +153,7 @@ set(gca, 'fontsize', f.gca)
 xlabel("\alpha_{TGF} / \alpha_{TGF}^{base}", 'fontsize', f.xlab)
 ylabel('Final Intracellular [K^+] (mmol/L)')
 ylim(ylims_muscle)
+legend(labs, 'location', 'best', 'fontsize', f.leg)
 grid on
 
 AddLetters2Plots(figure(5), {'(A1)', '(B1)', '(A2)', '(B2)'},...

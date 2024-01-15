@@ -2,10 +2,10 @@
 clear all;
 
 %% load data
-f1 = './MultiDaySim/22-Nov-2023_driver_multiday_insulin-1_Kamt_meal-104_TGFeff-0_alphaTGF-0.11694_etaPTKreab-0.67_ndays-50_notes-noeffect_new.mat';
-f2 = './MultiDaySim/22-Oct-2023_driver_multiday_insulin-1_Kamt_meal-104_TGFeff-1_alphaTGF-0.11694_etaPTKreab-0.36_ndays-50_notes-TongHighK.mat';
-f3 = './MultiDaySim/22-Oct-2023_driver_multiday_insulin-1_Kamt_meal-104_TGFeff-3_alphaTGF-0.11694_etaPTKreab-0.36_ndays-50_notes-PTonly.mat';
-f4 = './MultiDaySim/22-Oct-2023_driver_multiday_insulin-1_Kamt_meal-26_TGFeff-3_alphaTGF-0.11694_etaPTKreab-0.67_ndays-50_notes-control.mat';
+f1 = './MultiDaySim/15-Jan-2024_driver_multiday_insulin-1_Kamt_meal-104_TGFeff-0_alphaTGF-0.11694_etaPTKreab-0.36_ndays-50_notes-noPTTGF.mat';  %'./MultiDaySim/22-Nov-2023_driver_multiday_insulin-1_Kamt_meal-104_TGFeff-0_alphaTGF-0.11694_etaPTKreab-0.67_ndays-50_notes-noeffect_new.mat';
+f2 = './MultiDaySim/15-Jan-2024_driver_multiday_insulin-1_Kamt_meal-104_TGFeff-1_alphaTGF-0.11694_etaPTKreab-0.36_ndays-50_notes-PTTGF.mat'; %'./MultiDaySim/22-Oct-2023_driver_multiday_insulin-1_Kamt_meal-104_TGFeff-1_alphaTGF-0.11694_etaPTKreab-0.36_ndays-50_notes-TongHighK.mat';
+f3 = './MultiDaySim/15-Jan-2024_driver_multiday_insulin-1_Kamt_meal-104_TGFeff-3_alphaTGF-0.11694_etaPTKreab-0.36_ndays-50_notes-PTonly.mat'; %'./MultiDaySim/22-Oct-2023_driver_multiday_insulin-1_Kamt_meal-104_TGFeff-3_alphaTGF-0.11694_etaPTKreab-0.36_ndays-50_notes-PTonly.mat';
+f4 = './MultiDaySim/15-Jan-2024_driver_multiday_insulin-1_Kamt_meal-26_TGFeff-0_alphaTGF-0.11694_etaPTKreab-0.36_ndays-50_notes-control.mat'; %'./MultiDaySim/22-Oct-2023_driver_multiday_insulin-1_Kamt_meal-26_TGFeff-3_alphaTGF-0.11694_etaPTKreab-0.67_ndays-50_notes-control.mat';
 
 dat1 = load(f1);
 dat2 = load(f2);
