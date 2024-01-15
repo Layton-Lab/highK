@@ -1,5 +1,4 @@
 # Set up parameter ranges for Morris Analysis
-# TODO
 
 testpars <- c("kgut",
                 "GFR_base",
@@ -15,7 +14,6 @@ testpars <- c("kgut",
                 "m_K_ALDO",
                 "FF",
                 "A_insulin",
-                "B_insulin",
                 "alpha_al",
                 "beta_al")
 
@@ -33,7 +31,6 @@ parsinf <- c(0.5 * p$kgut,
             0.5 * p$m_K_ALDO,
             0.5 * p$FF,
             0.5 * p$A_insulin,
-            0.5 * p$B_insulin,
             0.5 * p$alpha_al,
             0.5 * p$beta_al
             )
@@ -53,7 +50,6 @@ parssup <- c(1.5 * p$kgut,
             1.5 * p$m_K_ALDO,
             1.5 * p$FF,
             1.5 * p$A_insulin,
-            1.5 * p$B_insulin,
             1.5 * p$alpha_al,
             1.5 * p$beta_al
             )

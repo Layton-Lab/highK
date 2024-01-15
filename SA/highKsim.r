@@ -48,6 +48,7 @@ optsSS <- list(meal_start = 1000, # so that C_insulin is at SS
             Kintake = params$Phi_Kin_ss,
             SS = 1)
 
+model <- model_Kreg
 ST <- stode(init_guess, time = 0, func = model,
                 parms = params,
                 opts = optsSS)

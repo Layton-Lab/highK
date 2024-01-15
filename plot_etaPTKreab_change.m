@@ -15,7 +15,7 @@ for ii = 1:length(eta_PTKreab_vals)
     eta_ptKreab = eta_PTKreab_vals(ii);
     notes = 'etaPTKreab';
     n_days = 50;
-    date_fixed = '25-Oct-2023'; % CHANGE DATE IF UPDATING DATA
+    date_fixed = '15-Jan-2024'; % CHANGE DATE IF UPDATING DATA
     fname = strcat('./MultiDaySim/', date_fixed, '_driver_multiday',...
             '_insulin-', num2str(1),...
             '_Kamt_meal-', num2str(104),... % High K intake
@@ -125,7 +125,7 @@ hold on
 for ii = 1:length(eta_PTKreab_vals)
     plot(round(eta_PTKreab_vals(ii),2), Kend(1,ii), 'marker', ms, ...
                     'markerfacecolor', cmap(ii,:), 'color', cmap(ii,:), 'linewidth', lw, ...
-                    'markersize', marksize)
+                    'markersize', marksize, 'linestyle','none')
 end
 xticks(round(eta_PTKreab_vals,2))
 yline(3.5,'color',cgray,'linestyle',lsgray, 'linewidth', lwgray, 'HandleVisibility', 'off')
@@ -135,6 +135,7 @@ xlim(xlims)
 ylim(ylims_plas)
 xlabel("\eta_{pt-Kreab}", 'fontsize', f.xlab)
 ylabel('Final Plasma [K^+] (mmol/L)')
+legend(labs, 'location', 'best', 'fontsize', f.leg)
 grid on
 
 % K_intracellular
@@ -143,7 +144,7 @@ hold on
 for ii = 1:length(eta_PTKreab_vals)
     plot(round(eta_PTKreab_vals(ii),2), Kend(2,ii), 'marker', ms, ...
                     'markerfacecolor', cmap(ii,:), 'color', cmap(ii,:), 'linewidth', lw, ...
-                    'markersize', marksize)
+                    'markersize', marksize,'linestyle','none')
 end
 %xticklabels(labs)
 xticks(round(eta_PTKreab_vals,2))
@@ -154,6 +155,7 @@ xlim(xlims)
 xlabel("\eta_{pt-Kreab}", 'fontsize', f.xlab)
 ylabel('Final Intracellular [K^+] (mmol/L)')
 ylim(ylims_muscle)
+legend(labs, 'location', 'best', 'fontsize', f.leg)
 grid on
 
 AddLetters2Plots(figure(5), {'(A1)', '(B1)', '(A2)', '(B2)'},...
