@@ -26,3 +26,7 @@ These are the files use for making the figures in the manuscript. The simulation
 - Parameter values are set using **set_params.m**
 - Files used to conduct the sensitivity are in "SA". Use **localsensitivity.r** for local sensitivity analysis and **MorrisAnalysis_r100.r** for the Morris analysis. Postprocess results with **postprocess_localsensitivity** and **postprocess_MorrisAnalysis.r** to convert to .csv for the figures.
 
+
+## Notes
+- The global sensitivity analysis takes a long time (about 4 hours on a server) so it is not recommended to run on a person computer.
+
