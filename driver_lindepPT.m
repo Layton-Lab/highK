@@ -1,5 +1,4 @@
-% High K simulation experiment
-% Options: PT impact of high K intake
+% High K simulation with dynamic PT
 clear all;
 
 % initialize parameter values
@@ -7,52 +6,43 @@ fprintf('loading params \n')
 pars = set_params();
 [params, parnames] = pars2vector(pars, 0);
 
-%------------- 
-% Settings
-%-------------
+%----------------
+% Simulation settings
+%------------------
 MealInsulin = 1; % insulin + KCl meals
-len_meal = 30; % length of meal in minutes
-doFF = 1; % do FF effect on DT
-Kamt_high = 4 * 78 / 3; % high K intake, per meal
-Kamt_control = 78 / 3; % control K intake, per meal (seems to keep stable here...)
-Kamt_meal = Kamt_high; %Kamt_high; %Kamt_high; %Kamt_control; % control sim
+len_meal = 30; % length of meal in mins
+doFF=1; % do GI FF effect
+Kamt_high = 4*78/3;  % high K intake
+Kamt_meal = Kamt_high;
 
-doMKX = 0; % do MKX in the simulation 1: DT K sec , 2: CDKsec, 3: CDKreab
+n_days = 50;
 
-n_days = 50 % number of days for simullation
+TGF_eff = 1; %1; % 1: PT + GFR, 2: GFR only, 3: PT only
 
-TGF_eff = 1; %0; %3; %1 %1; % do TGF_eff (1: PT + GFR, 2: GFR only, 3: PT only)
-% TGF_eff parameters
-eta_ptKreab = 0.36; %0.67; %0.36; % Baseline high K %0.36; % Wang 2023 %0.67; % baseline normal
-% 0.1800    0.2400    0.3000    0.3600    0.4300    0.4900    0.5500    0.6100    0.6700
 
-% Fold change
-% 0.5000, 0.6250, 0.7500, 0.8750, 1.0000, 1.1250, 1.2500, 1.3750, 1.5000
-alpha_TGF = 1.0* pars.alpha_TGF; % baseline
+alpha_TGF = pars.alpha_TGF;
 
-%------------------
-%------------------
-% sim settings
+% dynamic eta_PT
+dyn_etaPT = 1;
+etaPT_0 = 0.67; % starting eta_ptKreab
+etaPT_final = 0.36; % final eta_ptKreab % Wang 2023 on high K diet
+
+t_eta_days = 1; % how many days to high K adjustment
+
+
+%---------------------
+%---------------------
+% simulation settings
 opts.do_insulin = MealInsulin;
-opts.do_FF = doFF; 
+opts.do_FF = doFF;
+opts.do_TGFeff = [TGF_eff, alpha_TGF, etaPT_0];
 
-
-
-
-if doMKX > 0
-    if doMKX == 1
-        % slope tries (0.005, 0.01, 0.025, 0.05, 0.075, 0.1)
-        MKXslope = 0.1; % dtKsec slope
-    elseif doMKX == 2
-        MKXslope = 0.1; % cdKsec slope
-    elseif doMKX == 3
-        MKXslope = -0.1; % cdKreab slope
-    end
-else
-    MKXslope = -1;
-end
-opts.do_MKX = [doMKX, MKXslope];
-opts.do_TGFeff = [TGF_eff, alpha_TGF, eta_ptKreab];
+% dynamic eta_ptKreab settings
+t_etaPT_mins = t_eta_days * 60 * 24; % convert from days
+t0 = 0;
+m = (etaPT_final - etaPT_0) / (t_etaPT_mins - t0); % slope
+b = etaPT_0 - m * t0; % intercept
+opts.do_dyn_etaPT = [dyn_etaPT, etaPT_final, etaPT_0, t_etaPT_mins];
 
 %% set initial conditions
 temp = load('./SS/SS_4vars.mat');
@@ -60,12 +50,9 @@ SS = temp.SS;
 [IC, ~, ~] = getSS(SS, params, ...
     'do_insulin', opts.do_insulin,...
     'do_FF',opts.do_FF,...
-    'do_MKX', opts.do_MKX,...
     'do_figs', 0); % start at SS
 
-
-%% Intake for multiple day s
-
+%% Intake for multiple days
 MealTimes = [6, 12, 18]*60; % meal times
 Meal_Kamts = Kamt_meal * ones(size(MealTimes)); % amounts of K per meal
 
@@ -89,29 +76,15 @@ end
 save_res = input('save results? (0/1) ');
 if save_res
     notes = input('notes: ');
-    if doMKX > 0
-        fname = strcat('./MultiDaySim/', date, '_driver_multiday',...
-                    '_insulin-', num2str(MealInsulin),...
-                    '_Kamt_meal-', num2str(Kamt_meal),...
-                    '_MKX-', num2str(doMKX),...
-                    '_MKXSlope-', num2str(MKXslope),...
-                    '_TGFeff-', num2str(TGF_eff),...
-                    '_alphaTGF-', num2str(alpha_TGF),...
-                    '_etaPTKreab-', num2str(eta_ptKreab),...
-                    '_ndays-', num2str(n_days),...
-                    '_notes-', notes,...
-                    '.mat');
-    else
-        fname = strcat('./MultiDaySim/', date, '_driver_multiday',...
-            '_insulin-', num2str(MealInsulin),...
-            '_Kamt_meal-', num2str(Kamt_meal),...
-            '_TGFeff-', num2str(TGF_eff),...
-            '_alphaTGF-', num2str(alpha_TGF),...
-            '_etaPTKreab-', num2str(eta_ptKreab),...
-            '_ndays-', num2str(n_days),...
-            '_notes-', notes,...
-            '.mat');
-    end
+    fname = strcat('./MultiDaySim/', date, '_driver_lindep',...
+        '_insulin-', num2str(MealInsulin),...
+        '_Kamt_meal-', num2str(Kamt_meal),...
+        '_etaPT_final-', num2str(etaPT_final),...
+        '_etaPT_0-', num2str(etaPT_0),...
+        't_eta_days-', num2str(t_eta_days),...
+        '_ndays-', num2str(n_days),...
+        '_notes-', notes,...
+        '.mat');
     save(fname)
     fprintf('results saved to: \n %s \n', fname);
 end
@@ -120,54 +93,6 @@ end
 % plot results
 %---------------
 T = T./60; % change to hours
-
-%% Last day
-figure(1);
-clf;
-nr = 2; nc = 2;
-lw = 3; lwgray = 2; lsgray = '--';
-cmap = parula(6);
-c1 = cmap(1,:); c2 = cmap(2,:); c3 = cmap(3,:); c4 = cmap(4,:);
-cgraymap = gray(5);
-cgray = cgraymap(3,:);
-subplot(nr,nc,1)
-plot(T, Y(:,1), 'linewidth', lw, color = c1)
-xlabel('Time (hrs)')
-ylabel('Gut amount')
-title('Gut amount')
-grid on
-
-subplot(nr,nc,2)
-hold on
-plot(T,Y(:,2)/pars.V_plasma, 'linewidth',lw,'color',c2)
-yline(3.5,'color',cgray,'linestyle',lsgray, 'linewidth', lwgray)
-yline(5.0,'color',cgray,'linestyle',lsgray, 'linewidth', lwgray)
-xlabel('Time (hrs)')
-ylabel('Plasma [K^+]')
-title('Plasma [K^+]')
-grid on
-
-subplot(nr,nc,3)
-hold on
-plot(T,Y(:,3)/pars.V_interstitial,'linewidth',lw,'color',c3)
-yline(3.5,'color',cgray,'linestyle',lsgray, 'linewidth', lwgray)
-yline(5.0,'color',cgray,'linestyle',lsgray, 'linewidth', lwgray)
-xlabel('Time (hrs)')
-ylabel('Interstitial [K^+]')
-title('Interstitial [K^+]')
-grid on
-
-subplot(nr,nc,4)
-hold on
-plot(T,Y(:,4)/pars.V_muscle,'linewidth',lw,'color',c4)
-yline(120,'color',cgray,'linestyle',lsgray, 'linewidth', lwgray)
-yline(140,'color',cgray,'linestyle',lsgray, 'linewidth', lwgray)
-xlabel('Time (hrs)')
-ylabel('Intracellular [K^+]')
-title('Intracellular [K^+]')
-grid on
-
-sgtitle('Last day')
 
 %% All the days
 T_all = []; Y_all = [];
@@ -222,10 +147,10 @@ ylabel('Intracellular [K^+]')
 title('Intracellular [K^+]')
 grid on
 
-%%
-%------------
-% functions
-%------------
+
+%-------------------------
+% Functions used
+%-------------------------
 function [T, Y] = one_day_meals(IC0, Meal_Kamts, len_meal, MealTimes, params, opts)
     if MealTimes(1) > 0
     % start with fasting simulation if not starting at 0
@@ -262,14 +187,8 @@ function [t, y] = meal_sim(IC, t0, len_meal, Kamt, params, opts)
                                 'meal_time', t0,... % t0 is start of meal
                                 'Kintake', Kintake,...
                                 'TGF_eff', opts.do_TGFeff,...
-                                'do_MKX', opts.do_MKX),...
+                                'do_dyn_etaPT', opts.do_dyn_etaPT),...
                                 tspan, IC, options);
-%     vals = compute_vars(t,y,params,...
-%                             'do_insulin', opts.do_insulin,...
-%                             'do_FF', opts.do_FF, ...
-%                             'meal_time', t0,...
-%                             'TGF_eff', opts.do_TGFeff,...
-%                             'do_MKX', opts.do_MKX);
 end
 
 % Fasting simulation
@@ -280,14 +199,7 @@ function [t, y] = fast_sim(IC, tspan, last_meal, params, opts)
                                 'do_FF', opts.do_FF,...
                                 'meal_time', last_meal,...
                                 'Kintake', 0,... % fasting state
-                                'do_MKX', opts.do_MKX,...
+                                'do_dyn_etaPT', opts.do_dyn_etaPT,...
                                 'TGF_eff', opts.do_TGFeff),... 
                                 tspan, IC, options);
-%     vals = compute_vars(t,y,params,...
-%                             'do_insulin', opts.do_insulin,...
-%                             'do_FF', opts.do_FF,...
-%                             'meal_time', last_meal,...
-%                             'Kintake', 0,...
-%                             'do_MKX', opts.do_MKX,...
-%                             'TGF_eff', opts.do_TGFeff); 
 end

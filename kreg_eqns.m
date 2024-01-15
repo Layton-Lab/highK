@@ -49,6 +49,7 @@ MKX = 0;
 Kintake = 0;
 meal_start = 0;
 TGF_eff = 0;
+dynPT = 0; % dynamic eta_PT
 for i = 1:2:length(varargin)
     temp = varargin{i+1};
     if strcmp(varargin{i}, 'SS')
@@ -70,6 +71,11 @@ for i = 1:2:length(varargin)
         TGF_eff = temp(1);
         alpha_TGF = temp(2);
         eta_ptKreab = temp(3);
+    elseif strcmp(varargin{i}, 'do_dyn_etaPT')
+        dynPT = temp(1); % 
+        etaPT_final = temp(2);
+        etaPT_0 = temp(3);
+        t_etaPT_mins = temp(4);
     else
         disp('WRONG VARARGIN INPUT')
         fprintf('What is this varargin input? %s \n', varargin{i})
@@ -139,6 +145,17 @@ end
 
 % renal K handling
 eta_psKreab_base = eta_ptKreab_base + eta_LoHKreab;
+if dynPT
+    if t<t_etaPT_mins
+        t0 = 0;
+        m = (etaPT_final - etaPT_0) / (t_etaPT_mins - t0); % slope
+        b = etaPT_0 - m * t0; % intercept
+        % dynamic eta_ptKreab based on time
+        eta_ptKreab = m * t + b;
+    else
+        eta_ptKreab = etaPT_final;
+    end
+end
 if TGF_eff == 1 % PT + GFR effect
     eta_psKreab = eta_ptKreab + eta_LoHKreab;
     GFR = GFR_base + alpha_TGF * (eta_psKreab - eta_psKreab_base);
