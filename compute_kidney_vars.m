@@ -38,7 +38,6 @@ ALD_eq = params(26);
 m_K_ALDO = params(27);
 FF = params(28);
 A_insulin = params(29);
-B_insulin = params(30);
 
 %% Get variable inputs
 % default settings, varargin is used to change settings

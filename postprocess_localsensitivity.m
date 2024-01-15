@@ -3,7 +3,7 @@ clear all
 % This script can be used to postprocess the local sensitivity analysis
 % results
 
-fname = "./Sensitivity/2023-11-30_LocalAnalysis_50days.csv";
+fname = "./Sensitivity/2024-01-15_LocalAnalysis_50days.csv";
 dat = readtable(fname);
 fname = "./Sensitivity/2023-11-30_LocalAnalysis_50days_base_vals.csv";
 base_vals = readtable(fname);
@@ -113,19 +113,27 @@ xlabels = xlabels(sortIDs);
 
 figure(4)
 clf
+
+minValue = min(min([up_per_h2(:); down_per_h2(:)]));
+maxValue = max(max([up_per_h2(:); down_per_h2(:)]));
+
 subplot(2,1,1)
-h = heatmap(xlabels, ylabels_up, up_per_h2',...
+h1 = heatmap(xlabels, ylabels_up, up_per_h2',...
                 'colormap', parula, ...
                 'MissingDataColor', 'w', 'MissingDataLabel', '<1%');
-h.FontSize = 18;
+h1.FontSize = 18;
+% Apply the common color limits
+h1.ColorLimits = [minValue, maxValue];
+
 
 % figure(5)
 % clf
 subplot(2,1,2)
-h = heatmap(xlabels, ylabels_down, down_per_h2',...
+h2 = heatmap(xlabels, ylabels_down, down_per_h2',...
                 'colormap', parula, ...
                 'MissingDataColor', 'w', 'MissingDataLabel', '<1%');
-h.FontSize = 18;
+h2.FontSize = 18;
+h2.ColorLimits = [minValue, maxValue];
 
 
 
