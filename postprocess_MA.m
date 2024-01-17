@@ -1,10 +1,10 @@
 clear all;
 
-fname = './Sensitivity/2023-12-03_MA_ee_var-Kplas_r-100_notes-r100.csv';
+fname = './Sensitivity/2024-01-17_MA_ee_var-Kplas_r-100_notes-new50days.csv'; % 50 days TODO -- update with new ranges
 T_Kplas = readtable(fname, 'ReadRowNames', true);
 EEplas = table2array(T_Kplas);
-fname = './Sensitivity/2023-12-03_MA_ee_var-Kmusc_r-100_notes-r100.csv';
-T_Kmusc = readtable(fname, 'ReadRowNames', true);
+fname = './Sensitivity/2024-01-17_MA_ee_var-Kmusc_r-100_notes-new50days.csv'; % 50 days TODO -- update with new ranges
+T_Kmusc = readtable(fname, 'ReadRowNames', true); 
 EEmusc = table2array(T_Kmusc);
 
 %% set parameter names
@@ -48,35 +48,27 @@ for jj = 1:length(pname_plt)
         'markersize', marksize, 'marker', ms,...
         'color', cmap(jj, :), 'MarkerFaceColor', cmap(jj,:),...
         'linestyle', 'none', 'DisplayName', pname_plt{id})
-    if or(plasvals(2,id) > 0.5, plasvals(3,id) > 0.5)
-        if id == 13 % AKin
-            dx = -0.2; dy = 0.2;
-        elseif id == 10 % AcdKreab
-            dx = -0.5; dy = -0.1;
-        elseif id == 8 % BdtKsec
-            dx = 0.0; dy = 0.15;
-        elseif id == 7 % AdtKsec
-            dx = 0.125; dy = -0.05;
-        elseif id == 11 % Calbase
-            dx = 0.0; dy = 0.15;
-        elseif id == 4 % eta_LoKKreab
-            dx = 0.0; dy = -0.15;
-        elseif id == 3 % eta_ptKreab_base
-            dx = -0.15; dy = 0.25;
+    if or(plasvals(2,id) > 0.1, plasvals(3,id) > 0.1)
+        if id == 1 % kgut
+            dx = 0.1; dy = -0.1;
         elseif id == 2 % GFRbase
-            dx = 0.0; dy = -0.15;
+            dx = 0.025;dy = -0.1;
+        elseif id == 3 % eta_ptKreab_base
+            dx = -0.1; dy = 0.15;
+        elseif id == 4 % eta_LOHKreab
+            dx = 0.1; dy = 0.1;
+        elseif id == 5 % eta_ptKreab
+            dx = 0.1; dy = 0.1;
         elseif id == 9 % alpha_TGF
-            dx = -0.37; dy = 0.15;
-        elseif id == 17 % beta_al
-            dx = 0.0; dy = -0.125;
-        elseif id == 15 % Binsulin
-            dx = -0.2; dy = 0.2;
-        elseif plasvals(3,id) > 1.75
-            dx = -0.2; dy = 0.2;
+            dx = -0.15; dy = 0.14;
+        elseif id == 15 % alpha_al
+            dx = 0.05; dy = -0.05;
+        elseif id == 16 % beta_al
+            dx = 0.05; dy = -0.05;
         elseif plasvals(3,id) > 1.0
-            dx = -0.2; dy = -0.2;
+            dx = 0.1; dy = -0.1;
         else
-            dx = 0.0; dy = 0.1;
+            dx = 0.1; dy = -0.1;
         end
         text(plasvals(2,id) + dx, plasvals(3,id) + dy, pname_plt{id},...
             'fontsize', ftxt)
@@ -86,8 +78,8 @@ end
 set(gca, 'fontsize', fgca)
 xlabel('\mu*', 'fontsize', fx)
 ylabel('\sigma', 'fontsize', fy)
-xlim([0.0, 5.0])
-ylim([0.0, 5.0])
+xlim([0.0, 4.0])
+ylim([0.0, 4.0])
 title('Plasma [K^+]', 'fontsize', ft)
 grid on
 
@@ -100,31 +92,25 @@ for jj = 1:length(pname_plt)
         'markersize', marksize, 'marker', ms,...
         'color', cmap(jj,:), 'MarkerFaceColor', cmap(jj,:),...
         'linestyle', 'none', 'DisplayName', pname_plt{id})
-    if or(muscvals(2,id) > 40, muscvals(3,id) > 30)
-        if id == 7 % AdtKsec
-            dx = 6; dy = 1;
-        elseif id == 8
-            dx = 5; dy = 5;
-        elseif id == 6 % phidtKsec_eq
-            dx = 5; dy = -5;
-        elseif id == 13 % A_kin
-            dx = -5; dy = 10;
-        elseif id == 4 % eta_LoHKreab
-            dx = -10; dy = 10;
-        elseif id == 1 % kgut
-            dx = 0; dy = 10;
-        elseif id == 16
-            dx = 5; dy = 0.0;
-        elseif id == 17
-            dx = 5; dy = -5;
-        elseif id == 3 % eta_ptKreab_base
-            dx = 6; dy = 8;
+    if or(muscvals(2,id) >10, muscvals(3,id) > 10)
+        if id == 1 % kgut
+            dx = 3; dy = 6;
+        elseif id == 2 % GFRbase
+            dx = -1; dy = -6;
         elseif id == 9 % alphaTGF
-            dx = -17; dy = 10;
+            dx = -15; dy = 7;
+        elseif id == 11 % C_al_base
+            dx = -5; dy = 8;
         elseif id == 12 % mKALDO
-            dx = -5.0; dy = 12;
+            dx = 1; dy = -4;
+        elseif id == 14 % Ainsulin
+            dx = -4; dy = -6;
+        elseif id == 15 % alpha_al
+            dx = 0.0; dy = -5;
+        elseif id == 16 % beta_al
+            dx = 0.0; dy = -5;
         elseif muscvals(2,id) > 150
-            dx = -20; dy = 10;
+            dx = 0; dy = 5;
         else
             dx = 0.0; dy = 5.0;
         end
@@ -135,8 +121,8 @@ end
 set(gca, 'fontsize', fgca)
 xlabel('\mu*', 'fontsize', fx)
 ylabel('\sigma', 'fontsize', fy)
-ylim([0.0, 250])
-xlim([0.0, 250])
+ylim([0.0, 200])
+xlim([0.0, 200])
 % xticks(0.0:25:150)
 % yticks(0.0:25:150)
 title('Intracellular [K^+]', 'fontsize', ft)
