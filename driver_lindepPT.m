@@ -27,7 +27,7 @@ dyn_etaPT = 1;
 etaPT_0 = 0.67; % starting eta_ptKreab
 etaPT_final = 0.36; % final eta_ptKreab % Wang 2023 on high K diet
 
-t_eta_days = 1; % how many days to high K adjustment
+t_eta_days = 30; % how many days to high K adjustment
 
 
 %---------------------
@@ -58,15 +58,17 @@ Meal_Kamts = Kamt_meal * ones(size(MealTimes)); % amounts of K per meal
 
 Tvals = {}; Yvals = {};
 fprintf('day 1 \n')
-[T, Y] = one_day_meals(IC, Meal_Kamts, len_meal, MealTimes, params, opts);
+day = 1;
+[T, Y] = one_day_meals(IC, Meal_Kamts, len_meal, MealTimes, params, day, opts);
 Tvals{1} = T; Yvals{1} = Y; % day 1 simulation
 
 for ii = 2:n_days
+    day = ii;
     if mod(ii, 10) == 0
         fprintf('day %s \n', num2str(ii))
     end
     IC = Yvals{ii-1}(end,:);
-    [T, Y] = one_day_meals(IC, Meal_Kamts, len_meal, MealTimes, params, opts);
+    [T, Y] = one_day_meals(IC, Meal_Kamts, len_meal, MealTimes, params, day, opts);
     Tvals{ii} = T; Yvals{ii} = Y;
 end
 
@@ -151,10 +153,10 @@ grid on
 %-------------------------
 % Functions used
 %-------------------------
-function [T, Y] = one_day_meals(IC0, Meal_Kamts, len_meal, MealTimes, params, opts)
+function [T, Y] = one_day_meals(IC0, Meal_Kamts, len_meal, MealTimes, params, day, opts)
     if MealTimes(1) > 0
     % start with fasting simulation if not starting at 0
-        [tf, yf] = fast_sim(IC0, [0,MealTimes(1)], -60*6, params, opts);
+        [tf, yf] = fast_sim(IC0, [0,MealTimes(1)], -60*6, params, day, opts);
         T = tf; 
         Y = yf;
     else
@@ -163,20 +165,20 @@ function [T, Y] = one_day_meals(IC0, Meal_Kamts, len_meal, MealTimes, params, op
     % Do meal simulations per day
     for ii = 1:length(MealTimes)
         [tm, ym] = meal_sim(Y(end,:), MealTimes(ii), len_meal, Meal_Kamts(ii), ...
-                                    params, opts);
+                                    params, day, opts);
         if ii < length(MealTimes)
             t_end = MealTimes(ii+1);
         else
             t_end = 24 * 60;
         end
         [tf, yf] = fast_sim(ym(end,:), [tm(end), t_end], tm(1), ...
-                                    params, opts);
+                                    params, day, opts);
         T = [T; tm; tf]; Y = [Y; ym; yf];
     end
 end
 
 % Meal simulation
-function [t, y] = meal_sim(IC, t0, len_meal, Kamt, params, opts)
+function [t, y] = meal_sim(IC, t0, len_meal, Kamt, params, day, opts)
     tf = t0 + len_meal; % meal length
     tspan = [t0, tf];
     Kintake = Kamt / (tf - t0);
@@ -187,12 +189,13 @@ function [t, y] = meal_sim(IC, t0, len_meal, Kamt, params, opts)
                                 'meal_time', t0,... % t0 is start of meal
                                 'Kintake', Kintake,...
                                 'TGF_eff', opts.do_TGFeff,...
-                                'do_dyn_etaPT', opts.do_dyn_etaPT),...
+                                'do_dyn_etaPT', opts.do_dyn_etaPT,...
+                                'day', day),...
                                 tspan, IC, options);
 end
 
 % Fasting simulation
-function [t, y] = fast_sim(IC, tspan, last_meal, params, opts)
+function [t, y] = fast_sim(IC, tspan, last_meal, params, day, opts)
     options = odeset('RelTol', 1.0e-6, 'AbsTol', 1e-9); % ode solver settings
     [t, y] = ode15s(@(t,y) kreg_eqns(t,y,params,...
                                 'do_insulin', opts.do_insulin,...
@@ -200,6 +203,7 @@ function [t, y] = fast_sim(IC, tspan, last_meal, params, opts)
                                 'meal_time', last_meal,...
                                 'Kintake', 0,... % fasting state
                                 'do_dyn_etaPT', opts.do_dyn_etaPT,...
-                                'TGF_eff', opts.do_TGFeff),... 
+                                'TGF_eff', opts.do_TGFeff,...
+                                'day', day),... 
                                 tspan, IC, options);
 end
