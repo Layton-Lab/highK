@@ -2,17 +2,13 @@ function [SS, exitflag, residual] = getSS(IC, params, varargin)
     
     % default settings, varargin is used to change settings
     do_figs    = false;
-    printSS    = false; % print out final steady states
     do_insulin = true;
     do_FF      = true;
     MKX        = 0; MKXslope = 0;
-    SS         = true; % compute SS solution
     alt_sim    = false; % use alternate equations
     for i = 1:2:length(varargin)
         temp = varargin{i+1};
-        if strcmp(varargin{i}, 'SS')
-            SS = temp;
-        elseif strcmp(varargin{i}, 'alt_sim')
+        if strcmp(varargin{i}, 'alt_sim')
             alt_sim = temp;
         elseif strcmp(varargin{i}, 'do_MKX')
             MKX = temp(1);
@@ -23,8 +19,6 @@ function [SS, exitflag, residual] = getSS(IC, params, varargin)
             do_FF = temp(1);
         elseif strcmp(varargin{i}, 'do_figs')
             do_figs = temp(1);
-        elseif strcmp(varargin{i}, 'printSS')
-            printSS = temp(1);
         else
             disp('WRONG VARARGIN INPUT')
             fprintf('What is this varargin input? %s \n', varargin{i})
@@ -92,12 +86,6 @@ function [SS, exitflag, residual] = getSS(IC, params, varargin)
         title('Muscle K', 'fontsize', f.title)
         grid on
         
-        subplot(nrows,ncols,5)
-        plot(t,y(:,5),'linewidth',lw,'color',c1)
-        ylabel('N_{al}', 'fontsize', f.ylab)
-        xlabel('t', 'fontsize', f.xlab)
-        title('Normalized ALD', 'fontsize', f.title)
-        grid on
     end
     
 
@@ -127,31 +115,15 @@ function [SS, exitflag, residual] = getSS(IC, params, varargin)
         fprintf('M_Kplas       %0.4f     %0.4f \n', IG(2), SS(2))
         fprintf('M_Kinter       %0.4f     %0.4f \n', IG(3), SS(3))
         fprintf('M_Kmuscle       %0.4f     %0.4f \n', IG(4), SS(4))
-        fprintf('N_al       %0.4f     %0.4f \n', IG(5), SS(5))
     end
 
     if exitflag < 1
         fprintf('***WARNING: exitflag indicates error!***\n')
     end
     
-    if printSS
-       %% volumes
-       pars = set_params();
-       pars.V_plasma          = 4.5; %plasma fluid volume (L)
-       pars.V_interstitial    = 10; % interstitial ECF volume (L)
-       pars.V_muscle          = 24; %19.0; % intracellular fluid volume (L)
-       fprintf('final steady states \n')
-       fprintf('               SS \n')
-       fprintf('M_Kgut         %0.4f\n', SS(1))
-       fprintf('M_Kplas        %0.4f\n', SS(2))
-       fprintf('M_Kinter       %0.4f\n', SS(3))
-       fprintf('M_Kmuscle      %0.4f\n', SS(4))
-       fprintf('N_al           %0.4f\n', SS(5))
-       fprintf('\n')
-       fprintf('K_plas         %0.4f\n', SS(2)/pars.V_plasma)
-       fprintf('K_inter        %0.4f\n', SS(3)/pars.V_interstitial)
-       fprintf('K_muscle       %0.4f\n', SS(4)/pars.V_muscle)
-    end
+
+
+
 end
 
     
