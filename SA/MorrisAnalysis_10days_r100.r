@@ -3,7 +3,7 @@ library(deSolve)
 library(sensitivity)
 source('varnames.r')
 source('model.r')
-source('end_50daysim.r')
+source('end_10daysim.r')
 source('setparams.r')
 
 varnames <- get_varnames()
@@ -21,7 +21,7 @@ print(start_all)
 
 # Plasma K+ concentration effects
 print('start Kplas Morris')
-x_Kplas <- morris(model = Kplas_50days_MA,
+x_Kplas <- morris(model = Kplas_10days_MA,
                     factors = testpars,
                     r = rval,
                     design = list(type = 'oat',
@@ -38,7 +38,7 @@ print(difftime(end_Kplas, start_all, units = "mins"))
 
 # Muscle K+ concentration effects
 print('start Kmusc Morris')
-x_Kmuscle <- morris(model = Kmusc_50days_MA,
+x_Kmuscle <- morris(model = Kmusc_10days_MA,
                         factors = testpars,
                         r = rval,
                         design = list(type = 'oat',
@@ -59,7 +59,7 @@ print(difftime(Sys.time(), start_all, units = "mins"))
 
 today <- Sys.Date()
 fname = paste(today,
-                "_MorrisAnalysis_r100_50days",
+                "_MorrisAnalysis_r100_10days",
                 "_r-", rval,
                 ".RData",
                 sep = "")
