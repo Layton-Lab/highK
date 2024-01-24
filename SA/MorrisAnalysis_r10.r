@@ -14,7 +14,7 @@ source('set_morris.r')
 
 set.seed(56)
 
-rval = 100 
+rval = 10
 
 start_all <- Sys.time()
 print(start_all)
@@ -59,7 +59,7 @@ print(difftime(Sys.time(), start_all, units = "mins"))
 
 today <- Sys.Date()
 fname = paste(today,
-                "_MorrisAnalysis_r100_50days",
+                "_MorrisAnalysis_r10_50days",
                 "_r-", rval,
                 ".RData",
                 sep = "")
