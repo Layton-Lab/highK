@@ -34,33 +34,88 @@ for ii = 1:length(eta_ptKreab_vals)
     end % for ii
 end % for jj
 
+finalKplas_round = round(finalKplas * 100) / 100;
+finalKmusc_round = round(finalKmusc);
+
 figure(1)
 cmap = turbo;
 fsize = 16;
-min_fold = min(min(min(finalKplas))/4.2, min(min(finalKmusc))/130);
-max_fold = max(max(max(finalKplas))/4.2, max(max(finalKmusc))/130);
 clf;
 subplot(1,2,1)
-h1 = heatmap(finalKplas, ...
+h1 = heatmap(finalKplas_round, ...
                 'colormap', cmap);
 h1.XData = xlabs;
 h1.YData = ylabs;
 h1.Title = 'Final plasma [K^+]';
-h1.XLabel = '\alpha_{TGF} fold change';
+h1.XLabel = '\alpha_{TGF}/\alpha_{TGF}^{base}';
 h1.YLabel = '\eta_{pt-Kreab}';
 h1.FontSize = fsize;
-h1.ColorLimits = [3.75,7.25]; %[min_fold, max_fold] * 4.2;
+h1.ColorLimits = [3.75,7.25]; 
 
 subplot(1,2,2)
-h2 = heatmap(finalKmusc, ...
+h2 = heatmap(finalKmusc_round, ...
                 'colormap',cmap);
 h2.XData = xlabs;
 h2.YData = ylabs;
 h2.Title = 'Final intracellular [K^+]';
-h2.XLabel = '\alpha_{TGF} fold change';
+h2.XLabel = '\alpha_{TGF}/\alpha_{TGF}^{base}';
 h2.YLabel = '\eta_{pt-Kreab}';
 h2.FontSize = fsize;
 h2.ColorLimits = [120, 275];
+
+%%
+% plot rows K plas
+figure(2)
+clf;
+cmap = turbo(9);
+subplot(1,2,1)
+hold on
+for ii = 1:size(finalKplas,1)
+    plot(alpha_fold,finalKplas(ii,:), 'o-', 'color', cmap(ii,:),'linewidth',2)
+end
+ylabel('Kplas')
+xlabel('\alpha_{TGF} / \alpha_{TGF}^{base}')
+
+subplot(1,2,2)
+hold on
+for ii = 1:size(finalKplas,1)
+    plot(alpha_fold,finalKmusc(ii,:), 'o-', 'color', cmap(ii,:),'linewidth',2)
+end
+ylabel('Kmusc')
+xlabel('\alpha_{TGF} / \alpha_{TGF}^{base}')
+
+legend(ylabs)
+sgtitle('vary \eta_{ptKreab}')
+
+%%
+% plot cols
+figure(3)
+clf;
+cmap = turbo(9);
+subplot(1,2,1)
+hold on
+for ii = 1:size(finalKplas,2)
+    plot(eta_ptKreab_vals,finalKplas(:,ii), 'o-', 'color', cmap(ii,:),'linewidth',2)
+end
+ylabel('Kplas')
+xlabel('\eta_{ptKreab}')
+
+
+subplot(1,2,2)
+hold on
+for ii = 1:size(finalKmusc,2)
+    plot(eta_ptKreab_vals,finalKmusc(:,ii), 'o-', 'color', cmap(ii,:),'linewidth',2)
+end
+ylabel('Kmusc')
+xlabel('\eta_{ptKreab}')
+
+legend(xlabs)
+
+sgtitle('vary \alpha_{TGF}')
+
+
+
+
 
 %%-------------------
 % Functions
