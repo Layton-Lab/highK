@@ -28,5 +28,5 @@ These are the files use for making the figures in the manuscript. The simulation
 
 
 ## Notes
-- The global sensitivity analysis takes several hours (about 4 hours on a CPU server).
+- The global sensitivity analysis takes several hours to run.
 
