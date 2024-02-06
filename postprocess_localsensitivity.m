@@ -95,6 +95,9 @@ fprintf('done \n')
 %% Figures with removed values
 % Remove where both NaN
 rows_notAllNan = find(~all(isnan(up_down_per_h), 2));
+% remove V
+mask = ~ismember(rows_notAllNan, [2,4]); 
+rows_notAllNan = rows_notAllNan(mask);
 
 xlabels = ParNames(rows_notAllNan);
 up_down_per_h2 = up_down_per_h(rows_notAllNan, :);
@@ -102,7 +105,15 @@ up_per_h2 = up_per_h(rows_notAllNan, :);
 down_per_h2 = down_per_h(rows_notAllNan, :);
 
 % Switch the order by largest impact on K_IC
-[sortvals, sortIDs] = sort(up_down_per_h2(:,2)); 
+[~, sortIDs] = sort(up_down_per_h2(:,2)); 
+
+% shift so mKALDO is in the right index
+index = 7;
+% Remove the last element from the array
+lastElement = sortIDs(end);
+sortIDs(end) = [];
+% Insert the last element at the desired index
+sortIDs = [sortIDs(1:index-1); lastElement; sortIDs(index:end)];
 
 
 up_down_per_h2 = up_down_per_h2(sortIDs,:);
