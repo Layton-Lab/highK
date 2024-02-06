@@ -8,25 +8,25 @@ These are the files use for making the figures in the manuscript. The simulation
 
 **plot_urine_highK_GFRPT.m** Fig 3.1 and 3.3
 
-**plot_highK_GFRPT.m** Fig 3.2 and A.1
+**plot_highK_GFRPT.m** Fig 3.2
 
 **plot_etaPTKreab_change.m** Fig 3.4
 
 **plot_alphaTGF.m** Fig 3.5
 
-**postprocess_MA.m** Fig 3.6 and 3.7
+**postprocess_localsensitivity.m** Fig 3.6
 
-**plot_MKX.m** Fig 3.8 and 3.9
+**postprocess_MA.m** Fig 3.7 and Fig 3.8
 
-**postprocess_localsensitivity.m** Fig A.2
+
 
 ## Key files
 - The simulations for the data in "MultiDaySim" are done by using **driver_TGFeffect_multiday.m**
 - Model code **kreg_eqns.m**
 - Parameter values are set using **set_params.m**
-- Files used to conduct the sensitivity are in "SA". Use **localsensitivity.r** for local sensitivity analysis and **MorrisAnalysis_r100.r** for the Morris analysis. Postprocess results with **postprocess_localsensitivity** and **postprocess_MorrisAnalysis.r** to convert to .csv for the figures.
+- Files used to conduct the sensitivity are in "SA". Use **localsensitivity.r** for local sensitivity analysis and **MorrisAnalysis_r100.r** for the Morris analysis. Postprocess results with **postprocess_localsensitivity.r** and **postprocess_MorrisAnalysis.r** to convert to .csv for the figures.
 
 
 ## Notes
-- The global sensitivity analysis takes a long time (about 4 hours on a server) so it is not recommended to run on a person computer.
+- The global sensitivity analysis takes several hours (about 4 hours on a CPU server).
 
