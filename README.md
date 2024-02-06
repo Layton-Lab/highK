@@ -14,9 +14,11 @@ These are the files use for making the figures in the manuscript. The simulation
 
 **plot_alphaTGF.m** Fig 3.5
 
-**postprocess_localsensitivity.m** Fig 3.6
+**plot_alphaTGF_etaPT_combine.m** Fig 3.6
 
-**postprocess_MA.m** Fig 3.7 and Fig 3.8
+**postprocess_localsensitivity.m** Fig 3.7
+
+**postprocess_MA.m** Fig 3.8 and Fig 3.9
 
 
 
