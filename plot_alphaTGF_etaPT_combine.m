@@ -74,16 +74,18 @@ for ii = 1:size(finalKplas,1)
     plot(alpha_fold,finalKplas(ii,:), 'o-', 'color', cmap(ii,:),'linewidth',2)
 end
 ylabel('Kplas')
+xticks(alpha_fold)
 xlabel('\alpha_{TGF} / \alpha_{TGF}^{base}')
-
+grid on
 subplot(1,2,2)
 hold on
 for ii = 1:size(finalKplas,1)
     plot(alpha_fold,finalKmusc(ii,:), 'o-', 'color', cmap(ii,:),'linewidth',2)
 end
 ylabel('Kmusc')
+xticks(alpha_fold)
 xlabel('\alpha_{TGF} / \alpha_{TGF}^{base}')
-
+grid on
 legend(ylabs)
 sgtitle('vary \eta_{ptKreab}')
 
@@ -98,7 +100,9 @@ for ii = 1:size(finalKplas,2)
     plot(eta_ptKreab_vals,finalKplas(:,ii), 'o-', 'color', cmap(ii,:),'linewidth',2)
 end
 ylabel('Kplas')
+xticks(eta_ptKreab_vals)
 xlabel('\eta_{ptKreab}')
+grid on
 
 
 subplot(1,2,2)
@@ -107,8 +111,9 @@ for ii = 1:size(finalKmusc,2)
     plot(eta_ptKreab_vals,finalKmusc(:,ii), 'o-', 'color', cmap(ii,:),'linewidth',2)
 end
 ylabel('Kmusc')
+xticks(eta_ptKreab_vals)
 xlabel('\eta_{ptKreab}')
-
+grid on
 legend(xlabs)
 
 sgtitle('vary \alpha_{TGF}')
