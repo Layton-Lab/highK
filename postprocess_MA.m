@@ -1,9 +1,9 @@
 clear all;
 
-fname = './Sensitivity/2024-01-23_MA_ee_var-Kplas_r-100_notes-ma4.csv'; % 50 days TODO -- update with new ranges
+fname = './Sensitivity/2024-01-23_MA_ee_var-Kplas_r-100_notes-ma4.csv'; % 50 days
 T_Kplas = readtable(fname, 'ReadRowNames', true);
 EEplas = table2array(T_Kplas);
-fname = './Sensitivity/2024-01-23_MA_ee_var-Kmusc_r-100_notes-ma4.csv'; % 50 days TODO -- update with new ranges
+fname = './Sensitivity/2024-01-23_MA_ee_var-Kmusc_r-100_notes-ma4.csv'; % 50 days
 T_Kmusc = readtable(fname, 'ReadRowNames', true); 
 EEmusc = table2array(T_Kmusc);
 
