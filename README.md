@@ -1,5 +1,7 @@
 # High K diet
-This code is for the K+ regulation model used in [Stadt & Layton, A modeling analysis of whole-body potassium regulation on a high potassium diet: Proximal tubule and tubuloglomerular feedback effects, preprint](https://www.biorxiv.org/content/10.1101/2023.12.12.571254v1.abstract). 
+This code is for the K+ regulation model used in [Stadt & Layton, A modeling analysis of whole-body potassium regulation on a high potassium diet: Proximal tubule and tubuloglomerular feedback effects, AJP-Regulatory, Integrative and Comparative Physiology, 2024]([https://www.biorxiv.org/content/10.1101/2023.12.12.571254v1.abstract](https://doi.org/10.1152/ajpregu.00283.2023)). 
+
+Supplementary materials availabe in S1_text.pdf
 
 
 
